@@ -1,7 +1,7 @@
 {
   "name": "Path Pal",
   "short_name": "Path Pal",
-  "description": "Your personalized Pal for your college path.",
+  "description": "v1.01",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

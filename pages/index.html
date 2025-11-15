@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="description" content="Your personalized Pal for your college path.">
+  <meta name="description" content="v1.01">
   <title>Path Pal - Home</title>
   <link rel="manifest" href="/manifest.json">
   <link rel="stylesheet" href="/css/style.css">
@@ -16,11 +16,20 @@
     <p>Path Pal is designed for mobile devices. Please open this site on your mobile phone or tablet to get started.</p>
   </div>
 
-  <!-- Browser Mode Banner (shown when opened in browser, not PWA) -->
-  <div class="browser-banner" id="browser-banner">
-    <div class="browser-banner-content">
-      <h3>📱 Add to Home Screen</h3>
-      <p id="homescreen-instructions">Tap the menu button <span class="browser-icon">⋮</span> and select "Add to Home Screen" or "Install App"</p>
+  <!-- Browser Mode Popup (shown when opened in browser, not PWA) -->
+  <div class="browser-popup" id="browser-popup">
+    <div class="browser-popup-content">
+      <h2>Add to Home Screen</h2>
+      <p id="homescreen-instructions">Follow the steps below to add Path Pal to your home screen for the best experience.</p>
+      
+      <!-- Guide Image -->
+      <div class="browser-popup-image">
+        <img id="homescreen-guide-image" src="/media/Guide.png" alt="Add to Home Screen Guide" style="max-width: 100%; height: auto; border-radius: 8px;">
+      </div>
+      
+      <div class="browser-popup-actions">
+        <button class="btn-primary" onclick="dismissBrowserBanner()">Continue in Browser</button>
+      </div>
     </div>
   </div>
 
@@ -57,7 +66,7 @@
       <!-- Welcome Banner -->
       <section class="welcome-banner">
         <h2>Welcome to Path Pal!</h2>
-        <p>Your personalized Pal for your college path.</p>
+        <p>v1.01</p>
         <button class="btn-primary" onclick="window.location.href='/profile.html'">Start Your Journey</button>
       </section>
 
@@ -129,69 +138,63 @@
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>&copy; 2025 Path Pal. Your personalized Pal for your college path.</p>
+      <p>&copy; 2025 Path Pal. v1.01</p>
     </div>
   </footer>
 
-  <!-- Continue in Browser Button (shown when opened in browser, not PWA) -->
-  <div class="browser-continue" id="browser-continue">
-    <button class="btn-primary" onclick="dismissBrowserBanner()">Continue in Browser</button>
-  </div>
 
   <script src="/js/api.js"></script>
   <script src="/js/app.js"></script>
   <script>
-    // Show browser banner if not in standalone mode and on mobile
+    // Show browser popup if not in standalone mode and on mobile
     function checkBrowserMode() {
       if (isMobileDevice() && !isStandaloneMode()) {
         // Check if user dismissed it
-        const dismissed = localStorage.getItem('browser-banner-dismissed');
+        const dismissed = localStorage.getItem('browser-popup-dismissed');
         if (!dismissed) {
-          const banner = document.getElementById('browser-banner');
-          const continueBtn = document.getElementById('browser-continue');
+          const popup = document.getElementById('browser-popup');
           
-          if (banner) {
-            banner.style.display = 'block';
-            document.body.classList.add('has-browser-banner');
-          }
-          if (continueBtn) {
-            continueBtn.style.display = 'flex';
-            document.body.classList.add('has-browser-continue');
-          }
-          
-          // Update instructions based on platform
-          const instructions = document.getElementById('homescreen-instructions');
-          if (instructions) {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            const isAndroid = /Android/.test(navigator.userAgent);
+          if (popup) {
+            popup.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
             
-            if (isIOS) {
-              instructions.innerHTML = 'Tap the Share button <span class="browser-icon">□↑</span> and select "Add to Home Screen"';
-            } else if (isAndroid) {
-              instructions.innerHTML = 'Tap the menu button <span class="browser-icon">⋮</span> and select "Add to Home screen" or "Install app"';
-            } else {
-              instructions.innerHTML = 'Look for the install button in your browser\'s address bar';
+            // Update instructions and image based on platform
+            const instructions = document.getElementById('homescreen-instructions');
+            const guideImage = document.getElementById('homescreen-guide-image');
+            
+            if (instructions && guideImage) {
+              const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+              const isAndroid = /Android/.test(navigator.userAgent);
+              
+              if (isIOS) {
+                instructions.textContent = 'Tap the Share button and select "Add to Home Screen" to install Path Pal.';
+                guideImage.src = '/media/Guide.png';
+                guideImage.alt = 'iOS Add to Home Screen Guide';
+              } else if (isAndroid) {
+                instructions.textContent = 'Tap the menu button and select "Add to Home screen" or "Install app" to install Path Pal.';
+                guideImage.src = '/media/Guide.png';
+                guideImage.alt = 'Android Add to Home Screen Guide';
+              } else {
+                instructions.textContent = 'Look for the install button in your browser\'s address bar to add Path Pal to your home screen.';
+                guideImage.src = '/media/Guide.png';
+                guideImage.alt = 'Add to Home Screen Guide';
+              }
             }
           }
         }
       }
     }
 
-    // Dismiss browser banner
+    // Dismiss browser popup
     function dismissBrowserBanner() {
-      const banner = document.getElementById('browser-banner');
-      const continueBtn = document.getElementById('browser-continue');
+      const popup = document.getElementById('browser-popup');
       
-      if (banner) {
-        banner.style.display = 'none';
-        document.body.classList.remove('has-browser-banner');
-      }
-      if (continueBtn) {
-        continueBtn.style.display = 'none';
-        document.body.classList.remove('has-browser-continue');
+      if (popup) {
+        popup.style.display = 'none';
+        document.body.style.overflow = ''; // Restore scrolling
       }
       
-      localStorage.setItem('browser-banner-dismissed', 'true');
+      localStorage.setItem('browser-popup-dismissed', 'true');
     }
 
     // Load progress data and check browser mode

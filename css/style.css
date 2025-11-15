@@ -53,7 +53,11 @@ html {
   overscroll-behavior-y: none;
   overscroll-behavior-x: none;
   -webkit-overflow-scrolling: touch;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 body {
@@ -63,8 +67,8 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   overflow-y: auto;
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
+  height: 100%;
+  height: -webkit-fill-available;
   width: 100%;
   max-width: 100vw;
   overscroll-behavior: none;
@@ -75,6 +79,8 @@ body {
   margin: 0;
   padding: 0;
   touch-action: pan-y;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Mobile detection message */
@@ -110,80 +116,90 @@ body {
   max-width: 500px;
 }
 
-/* Browser mode banner (shown when opened in browser, not PWA) */
-.browser-banner {
-  display: none;
-  background: linear-gradient(135deg, var(--primary-green), #0a6b5d);
-  color: var(--white);
-  padding: 1rem;
-  box-shadow: 0 2px 8px var(--shadow);
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  width: 100%;
-  max-width: 100vw;
-  box-sizing: border-box;
-}
-
-.browser-banner-content {
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.browser-banner-content h3 {
-  color: var(--white);
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
-  font-weight: bold;
-}
-
-.browser-banner-content p {
-  color: var(--white);
-  margin: 0;
-  font-size: 0.9rem;
-  opacity: 0.95;
-  line-height: 1.4;
-}
-
-.browser-icon {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-weight: bold;
-  display: inline-block;
-  margin: 0 0.25rem;
-}
-
-/* Continue in browser button */
-.browser-continue {
+/* Browser mode popup (full-page modal shown when opened in browser, not PWA) */
+.browser-popup {
   display: none;
   position: fixed;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
-  background: var(--white);
-  padding: 1rem;
-  box-shadow: 0 -2px 8px var(--shadow);
-  z-index: 998;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 10000;
   justify-content: center;
   align-items: center;
-  max-width: 100vw;
+  padding: 0.5rem;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
-/* PWA safe area support for browser continue button */
-@supports (padding: max(0px)) {
-  .browser-continue {
-    padding-bottom: max(1rem, env(safe-area-inset-bottom));
-    padding-left: max(1rem, env(safe-area-inset-left));
-    padding-right: max(1rem, env(safe-area-inset-right));
-  }
-}
-
-.browser-continue button {
+.browser-popup-content {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  max-width: 500px;
   width: 100%;
-  max-width: 400px;
+  max-height: 95vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  font-family: 'Arvo', serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.browser-popup-content h2 {
+  color: var(--primary-green);
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: 'Arvo', serif;
+}
+
+.browser-popup-content > p {
+  color: var(--text-dark);
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  font-family: 'Arvo', serif;
+}
+
+.browser-popup-image {
+  margin: 0.75rem 0;
+  background: var(--light-mint);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  min-height: 0;
+}
+
+.browser-popup-image img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  object-fit: contain;
+}
+
+.browser-popup-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.browser-popup-actions button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-family: 'Arvo', serif;
 }
 
 /* Container */
@@ -192,7 +208,6 @@ body {
   width: 100%;
   margin: 0 auto;
   padding: 1rem;
-  min-height: calc(100vh - 140px); /* Prevent container from being too short */
   overflow-x: hidden;
   box-sizing: border-box;
 }
@@ -209,17 +224,9 @@ header {
   max-width: 100vw;
   overflow-x: hidden;
   box-sizing: border-box;
-  min-height: auto;
+  flex-shrink: 0;
 }
 
-/* Adjust header top position if browser banner is visible */
-body.has-browser-banner header {
-  top: 0;
-}
-
-body.has-browser-banner .browser-banner ~ header {
-  top: auto;
-}
 
 /* PWA safe area support for header */
 @supports (padding: max(0px)) {
@@ -315,17 +322,14 @@ nav a:hover, nav a.active {
 
 /* Main content */
 main {
-  min-height: calc(100vh - 140px);
+  flex: 1;
   padding-bottom: 2rem;
   overflow-x: hidden;
   max-width: 100vw;
   position: relative;
+  overflow-y: auto;
 }
 
-/* Add bottom padding when browser continue button is visible */
-body.has-browser-continue main {
-  padding-bottom: calc(2rem + 80px);
-}
 
 /* Welcome Banner */
 .welcome-banner {
@@ -716,19 +720,26 @@ body.has-browser-continue main {
 /* Footer */
 footer {
   background: var(--light-mint);
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem;
   text-align: center;
   color: var(--text-light);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   overflow-x: hidden;
   max-width: 100vw;
-  min-height: auto;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+footer p {
+  margin: 0;
+  padding: 0;
 }
 
 /* PWA safe area support for footer */
 @supports (padding: max(0px)) {
   footer {
-    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    padding-top: 0.5rem;
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
     padding-left: max(1rem, env(safe-area-inset-left));
     padding-right: max(1rem, env(safe-area-inset-right));
   }
