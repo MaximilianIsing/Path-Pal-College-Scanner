@@ -109,6 +109,7 @@
       <li><a href="/messages.html" class="active"><img src="/media/icons/Chat256x256.png" alt="AI Counselor" class="nav-icon"> AI Counselor</a></li>
       <li><a href="/saved.html"><img src="/media/icons/Star256x256.png" alt="Saved Colleges" class="nav-icon"> Saved Colleges</a></li>
       <li><a href="#" onclick="handleSignOut(); return false;"><img src="/media/icons/SignOut256x256.png" alt="Sign Out" class="nav-icon"> Sign Out</a></li>
+      <li><a href="/team.html"><img src="/media/icons/Team256x256.png" alt="Our Team" class="nav-icon"> Our Team</a></li>
       <li><a href="https://forms.gle/ULMYUSDifpanJ9KMA" target="_blank"><img src="/media/icons/Feedback256x256.png" alt="Feedback" class="nav-icon"> Feedback</a></li>
     </ul>
   </nav>
@@ -125,7 +126,7 @@
 
     <!-- Chat Messages Area - Takes remaining space -->
     <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 1rem; background: var(--light-mint); margin: 0; min-height: 0;">
-      <div class="message ai">
+          <div class="message ai">
         <strong>Path Pal:</strong> Hello! I'm your 24/7 personal counselor. Ask me anything about college admissions, course planning, career advice, or anything else related to your college path. How can I help you today?
       </div>
     </div>
@@ -149,8 +150,8 @@
         <button class="btn btn-secondary" onclick="askQuickQuestion('How should I prepare for college applications?')" style="text-align: left; justify-content: flex-start; margin: 0;">
           <img src="/media/icons/Check256x256.png" alt="Check" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 0.5rem;"> Application Prep
         </button>
-      </div>
-    </div>
+          </div>
+        </div>
 
     <!-- Chat Input Container - Fixed at bottom -->
     <div style="flex-shrink: 0; padding: 1rem; background: var(--white); border-top: 1px solid var(--border-color); margin: 0;">
@@ -160,24 +161,24 @@
           <span style="display: none; font-size: 1.2rem; color: var(--primary-green); font-weight: bold;">?</span>
         </button>
         <form id="chat-form" onsubmit="sendMessage(event)" style="flex: 1; display: flex; gap: 0.5rem; margin: 0;">
-          <input 
-            type="text" 
-            id="message-input" 
-            placeholder="Ask me anything..." 
-            required
-            autocomplete="off"
+            <input 
+              type="text" 
+              id="message-input" 
+              placeholder="Ask me anything..." 
+              required
+              autocomplete="off"
             maxlength="2000"
             style="flex: 1; padding: 0.75rem 1rem; border: 2px solid var(--border-color); border-radius: 25px; font-size: 1rem; font-family: 'Arvo', serif; margin: 0;"
-          />
+            />
           <button type="submit" style="padding: 0.75rem 1.5rem; background: var(--primary-green); color: var(--white); border: none; border-radius: 25px; cursor: pointer; font-family: 'Arvo', serif; font-weight: bold; white-space: nowrap; margin: 0;">Send</button>
-        </form>
+          </form>
       </div>
     </div>
   </main>
 
   <footer style="display: none;">
     <div class="container">
-      <p>&copy; 2025 Path Pal. v1.09.03</p>
+      <p>&copy; 2025 Path Pal. v1.09.3</p>
     </div>
   </footer>
 

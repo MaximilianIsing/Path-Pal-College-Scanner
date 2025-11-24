@@ -1,4 +1,4 @@
-const CACHE_NAME = 'path-pal-v1.09.03';
+const CACHE_NAME = 'path-pal-v1.09.3';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -11,6 +11,7 @@ const urlsToCache = [
   '/planner.html',
   '/messages.html',
   '/saved.html',
+  '/team.html',
   '/css/style.css',
   '/js/app.js',
   '/js/api.js',

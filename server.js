@@ -184,7 +184,7 @@ app.post('/api/chat', async (req, res) => {
 const htmlPages = [
   'index.html', 'profile.html', 'odds.html', 'simulator.html', 
   'explorer.html', 'career.html', 'activities.html', 'planner.html', 
-  'messages.html', 'saved.html'
+  'messages.html', 'saved.html', 'team.html'
 ];
 
 htmlPages.forEach(page => {
