@@ -92,9 +92,11 @@ def start_server():
     log("Scraper thread started")
     
     # Start API server in main thread
-    log("Starting API server on port 5000...")
+    # Use PORT environment variable from Render, or default to 5000
+    port = int(os.getenv("PORT", 5000))
+    log(f"Starting API server on port {port}...")
     try:
-        api_app.run(host="0.0.0.0", port=5000)
+        api_app.run(host="0.0.0.0", port=port)
     except Exception as e:
         log(f"Fatal error in API server: {e}")
         raise
