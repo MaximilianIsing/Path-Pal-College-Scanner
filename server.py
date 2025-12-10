@@ -72,9 +72,9 @@ def run_scraper():
         raise
 
 
-def start_server():
-    """Start both the scraper service and API server."""
-    log("Starting college scraper server...")
+def initialize_app():
+    """Initialize the scraper (runs once on app startup)."""
+    log("Initializing college scraper...")
     
     # Check and initialize if needed
     check_and_init()
@@ -90,18 +90,20 @@ def start_server():
     scraper_thread = threading.Thread(target=run_scraper, daemon=True)
     scraper_thread.start()
     log("Scraper thread started")
-    
-    # Start API server in main thread
-    # Use PORT environment variable from Render, or default to 5000
+
+
+# Initialize when module is imported (works for both Gunicorn and direct execution)
+# With Gunicorn --preload, this runs once before workers are forked
+initialize_app()
+
+
+if __name__ == "__main__":
+    # For local testing without Gunicorn
     port = int(os.getenv("PORT", 5000))
-    log(f"Starting API server on port {port}...")
+    log(f"Starting Flask development server on port {port}...")
     try:
         api_app.run(host="0.0.0.0", port=port)
     except Exception as e:
         log(f"Fatal error in API server: {e}")
         raise
-
-
-if __name__ == "__main__":
-    start_server()
 

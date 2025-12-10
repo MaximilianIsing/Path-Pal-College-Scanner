@@ -10,7 +10,8 @@ from flask import Flask, jsonify, request, abort
 from scraper_service import SCANNED_CSV, DATA_DIR, log
 
 app = Flask(__name__)
-ENDPOINT_KEY_FILE = os.path.join(DATA_DIR, "endpointkey.txt")
+# Read endpoint key from root directory, not data directory
+ENDPOINT_KEY_FILE = "endpointkey.txt"
 
 
 def get_endpoint_key():
